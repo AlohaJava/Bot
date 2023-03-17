@@ -16,6 +16,7 @@ intents.voice_states = True
 client = discord.Client(intents=intents)
 user_id = 464767634483838977
 daun_list = ['Кудряшев Даниил#2761']
+starskvim = ['Starskvim#5342']
 
 massage_on_message = [
     'снова что-то высрал. Господи, что же несет эта проститутка',
@@ -25,6 +26,16 @@ massage_on_message = [
     ')))'
     ')))))'
     ')))))))))'
+]
+
+god_names = [
+    'Даунил',
+    'Данилка',
+    'Давалкин'
+    'Технодемкин'
+    'Дотер'
+    'Данило'
+    'Донный'
 ]
 
 
@@ -41,10 +52,14 @@ async def on_voice_state_update(member, before, after):
             user = await client.fetch_user(user_id)
             if after.channel is not None:
                 await channel.send(
-                    f"{user.mention}! Эй, Даунил, {member.mention} зашел в канал {after.channel.name}, заходи, опущенка")
+                    f"{user.mention}! Эй, "
+                    + random.choice(god_names)
+                    + f", {member.mention} зашел в канал {after.channel.name}, заходи, опущенка")
             else:
                 await channel.send(
-                    f"{user.mention}! Эй, Даунил, {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
+                    f"{user.mention}! Эй, "
+                    + random.choice(god_names)
+                    + f", {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
 
 
 @client.event
