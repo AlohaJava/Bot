@@ -13,6 +13,7 @@ intents.voice_states = True
 
 client = discord.Client(intents=intents)
 user_id = 464767634483838977
+daun_list = ['Кудряшев Даниил#2761']
 
 @client.event
 async def on_ready():
@@ -29,5 +30,13 @@ async def on_voice_state_update(member, before, after):
             else:
                 await channel.send(f"{user.mention}! Эй, Даунил, {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
 
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if str(message.author) in daun_list:
+        user = await client.fetch_user(user_id)
+        await message.channel.send(f"{user.mention} снова что-то высрал. Господи, что же несет эта проститутка")
 
 client.run(os.environ["DISCORD_TOKEN"])
