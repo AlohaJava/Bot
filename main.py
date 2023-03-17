@@ -39,4 +39,42 @@ async def on_message(message):
         user = await client.fetch_user(user_id)
         await message.channel.send(f"{user.mention} снова что-то высрал. Господи, что же несет эта проститутка")
 
+
+@client.event
+async def on_message_edit(before, after):
+    if before.message.author == client.user:
+        return
+
+    if str(before.message.author) in daun_list:
+        user = await client.fetch_user(user_id)
+        await after.message.channel.send(f"{user.mention} обосрался?")
+
+@client.event
+async def on_message_delete(message):
+    if message.author == client.user:
+        return
+
+    if str(message.author) in daun_list:
+        user = await client.fetch_user(user_id)
+        await message.channel.send(f"{user.mention} выронил кал из жопы и быстро съел")
+
+@client.event
+async def on_reaction_add(reaction, user):
+    if user == client.user:
+        return
+
+    if str(user) in daun_list:
+        channel = client.get_channel(CHANNEL_ID)
+        user = await client.fetch_user(user_id)
+        await channel.send(f"{user.mention} всем похуй на твое мнение {reaction}")
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    if before.message.author == client.user:
+        return
+
+    if str(before.message.author) in daun_list:
+        user = await client.fetch_user(user_id)
+        await after.message.channel.send(f"{user.mention} покорно завалил ебало")
+
 client.run(os.environ["DISCORD_TOKEN"])
