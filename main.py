@@ -30,4 +30,4 @@ async def on_voice_state_update(member, before, after):
                 await channel.send(f"{user.mention}!Эй, Даунил, {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
 
 
-bot.run(os.environ["DISCORD_TOKEN"])
+client.run(os.environ["DISCORD_TOKEN"])
