@@ -25,9 +25,9 @@ async def on_voice_state_update(member, before, after):
             channel = client.get_channel(CHANNEL_ID)
             user = await client.fetch_user(user_id)
             if after.channel is not None:
-                await channel.send(f"{user.mention}!Эй, Даунил,{member.mention} зашел в канал {after.channel.name}, заходи, опущенка")
+                await channel.send(f"{user.mention}! Эй, Даунил, {member.mention} зашел в канал {after.channel.name}, заходи, опущенка")
             else:
-                await channel.send(f"{user.mention}!Эй, Даунил, {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
+                await channel.send(f"{user.mention}! Эй, Даунил, {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
 
 
 client.run(os.environ["DISCORD_TOKEN"])
