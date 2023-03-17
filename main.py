@@ -102,16 +102,20 @@ async def on_reaction_add(reaction, user):
         user = await client.fetch_user(user_id)
         await channel.send(f"{user.mention} всем похуй на твое мнение {reaction}")
 
-
 @client.event
 async def on_voice_state_update(member, before, after):
-    if before.message.author == client.user:
-        return
-
-    if str(before.message.author) in daun_list:
-        user = await client.fetch_user(user_id)
-        await after.message.channel.send(f"{user.mention} покорно завалил ебало")
-
+    # Replace USER_ID with the ID of the user you want to check for muting
+    if member.id == user_id:
+        if before.mute and not after.mute:
+            # User was unmuted, do nothing
+            text_channel = client.get_channel(CHANNEL_ID)
+            await text_channel.send(f"{member.mention} развалил ебало, сейчас снова будет нести хуйню.")
+            return
+        elif not before.mute and after.mute:
+            # User was muted, send message to text channel
+            text_channel = client.get_channel(CHANNEL_ID)
+            await text_channel.send(f"{member.mention} покорно завалил ебало.")
+            return
 
 @client.event
 async def on_member_update(before, after):
