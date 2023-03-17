@@ -60,8 +60,18 @@ async def on_voice_state_update(member, before, after):
                     f"{user.mention}! Эй, "
                     + random.choice(god_names)
                     + f", {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
-
-
+    # Replace USER_ID with the ID of the user you want to check for muting
+   if member.name + "#" + member.discriminator in WATCH_LIST:
+        if before.mute and not after.mute:
+            # User was unmuted, do nothing
+            text_channel = client.get_channel(CHANNEL_ID)
+            await text_channel.send(f"{member.mention} развалил ебало, сейчас снова будет нести хуйню.")
+            return
+        elif not before.mute and after.mute:
+            # User was muted, send message to text channel
+            text_channel = client.get_channel(CHANNEL_ID)
+            await text_channel.send(f"{member.mention} покорно завалил ебало.")
+            return
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -101,21 +111,6 @@ async def on_reaction_add(reaction, user):
         channel = client.get_channel(CHANNEL_ID)
         user = await client.fetch_user(user_id)
         await channel.send(f"{user.mention} всем похуй на твое мнение {reaction}")
-
-@client.event
-async def on_voice_state_update(member, before, after):
-    # Replace USER_ID with the ID of the user you want to check for muting
-    if member.id == user_id:
-        if before.mute and not after.mute:
-            # User was unmuted, do nothing
-            text_channel = client.get_channel(CHANNEL_ID)
-            await text_channel.send(f"{member.mention} развалил ебало, сейчас снова будет нести хуйню.")
-            return
-        elif not before.mute and after.mute:
-            # User was muted, send message to text channel
-            text_channel = client.get_channel(CHANNEL_ID)
-            await text_channel.send(f"{member.mention} покорно завалил ебало.")
-            return
 
 @client.event
 async def on_member_update(before, after):
