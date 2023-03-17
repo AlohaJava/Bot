@@ -1,6 +1,8 @@
 # This example requires the 'message_content' privileged intents
 
 import os
+import random
+
 import discord
 from discord.ext import commands
 
@@ -15,9 +17,20 @@ client = discord.Client(intents=intents)
 user_id = 464767634483838977
 daun_list = ['Кудряшев Даниил#2761']
 
+massage_on_message = [
+    'снова что-то высрал. Господи, что же несет эта проститутка',
+    'это было в твоей жопе или будет?',
+    'опять обмазался говном и всем об этом сообщает...'
+    'фу навонял'
+    ')))'
+    ')))))'
+    ')))))))))'
+]
+
 @client.event
 async def on_ready():
     print("Bot is ready")
+
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -26,9 +39,12 @@ async def on_voice_state_update(member, before, after):
             channel = client.get_channel(CHANNEL_ID)
             user = await client.fetch_user(user_id)
             if after.channel is not None:
-                await channel.send(f"{user.mention}! Эй, Даунил, {member.mention} зашел в канал {after.channel.name}, заходи, опущенка")
+                await channel.send(
+                    f"{user.mention}! Эй, Даунил, {member.mention} зашел в канал {after.channel.name}, заходи, опущенка")
             else:
-                await channel.send(f"{user.mention}! Эй, Даунил, {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
+                await channel.send(
+                    f"{user.mention}! Эй, Даунил, {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
+
 
 @client.event
 async def on_message(message):
@@ -37,7 +53,7 @@ async def on_message(message):
 
     if str(message.author) in daun_list:
         user = await client.fetch_user(user_id)
-        await message.channel.send(f"{user.mention} снова что-то высрал. Господи, что же несет эта проститутка")
+        await message.channel.send(f"{user.mention}" + random.choice(massage_on_message))
 
 
 @client.event
@@ -49,6 +65,7 @@ async def on_message_edit(before, after):
         user = await client.fetch_user(user_id)
         await after.message.channel.send(f"{user.mention} обосрался?")
 
+
 @client.event
 async def on_message_delete(message):
     if message.author == client.user:
@@ -57,6 +74,7 @@ async def on_message_delete(message):
     if str(message.author) in daun_list:
         user = await client.fetch_user(user_id)
         await message.channel.send(f"{user.mention} выронил кал из жопы и быстро съел")
+
 
 @client.event
 async def on_reaction_add(reaction, user):
@@ -68,6 +86,7 @@ async def on_reaction_add(reaction, user):
         user = await client.fetch_user(user_id)
         await channel.send(f"{user.mention} всем похуй на твое мнение {reaction}")
 
+
 @client.event
 async def on_voice_state_update(member, before, after):
     if before.message.author == client.user:
@@ -76,5 +95,6 @@ async def on_voice_state_update(member, before, after):
     if str(before.message.author) in daun_list:
         user = await client.fetch_user(user_id)
         await after.message.channel.send(f"{user.mention} покорно завалил ебало")
+
 
 client.run(os.environ["DISCORD_TOKEN"])
