@@ -27,6 +27,7 @@ massage_on_message = [
     ')))))))))'
 ]
 
+
 @client.event
 async def on_ready():
     print("Bot is ready")
@@ -95,6 +96,19 @@ async def on_voice_state_update(member, before, after):
     if str(before.message.author) in daun_list:
         user = await client.fetch_user(user_id)
         await after.message.channel.send(f"{user.mention} покорно завалил ебало")
+
+
+@client.event
+async def on_member_update(before, after):
+
+    if str(before.message.author) in daun_list:
+        if before.activity != after.activity:
+            if after.activity is not None and after.activity.type == discord.ActivityType.playing:
+                game = after.activity.name
+                print(f"{after.name} вместо развития играет в {game}!")
+            else:
+                game = before.activity.name
+                print(f"{after.name} позорно слился в {game} и плачет ;'(")
 
 
 client.run(os.environ["DISCORD_TOKEN"])
