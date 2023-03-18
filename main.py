@@ -42,7 +42,8 @@ god_names = [
 @client.event
 async def on_ready():
     print("Bot is ready")
-
+    text_channel = client.get_channel(CHANNEL_ID)
+    await text_channel.send(f"А меня создатели снова обновили. Интересно, что же еще я научился делать?)")
 
 @client.event
 async def on_voice_state_update(member, before, after):
