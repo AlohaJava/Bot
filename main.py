@@ -1,14 +1,10 @@
-# This example requires the 'message_content' privileged intents
-
 import os
 import random
-
 import discord
 from discord.ext import commands
 
 CHANNEL_ID = 850284466680758282
 
-# Здесь вы можете указать список пользователей, за которыми нужно следить
 WATCH_LIST = ["00.#3516", "Vaflz#3717"]
 intents = discord.Intents.default()
 intents.voice_states = True
@@ -45,6 +41,7 @@ async def on_ready():
     text_channel = client.get_channel(CHANNEL_ID)
     await text_channel.send(f"А меня создатели снова обновили. Интересно, что же еще я научился делать?)")
 
+
 @client.event
 async def on_voice_state_update(member, before, after):
     if member.name + "#" + member.discriminator in WATCH_LIST:
@@ -73,6 +70,7 @@ async def on_voice_state_update(member, before, after):
             text_channel = client.get_channel(CHANNEL_ID)
             await text_channel.send(f"{member.mention} покорно завалил ебало.")
             return
+
 
 @client.event
 async def on_message(message):
@@ -113,6 +111,7 @@ async def on_reaction_add(reaction, user):
         channel = client.get_channel(CHANNEL_ID)
         user = await client.fetch_user(user_id)
         await channel.send(f"{user.mention} всем похуй на твое мнение {reaction}")
+
 
 @client.event
 async def on_member_update(before, after):
