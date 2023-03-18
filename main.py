@@ -115,8 +115,7 @@ async def on_reaction_add(reaction, user):
 
 @client.event
 async def on_member_update(before, after):
-
-    if str(before.message.author) in daun_list:
+    if member.name + "#" + member.discriminator in daun_list:
         if before.activity != after.activity:
             if after.activity is not None and after.activity.type == discord.ActivityType.playing:
                 game = after.activity.name
