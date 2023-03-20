@@ -61,6 +61,7 @@ async def on_voice_state_update(member, before, after):
                     + god_names[random_index]
                     + f", {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
     # Replace USER_ID with the ID of the user you want to check for muting
+    print(before)
     if True:
         if before.mute and not after.mute:
             # User was unmuted, do nothing
