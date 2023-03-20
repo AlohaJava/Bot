@@ -2,6 +2,7 @@ import os
 import random
 import discord
 from discord.ext import commands
+from random import randrange
 
 CHANNEL_ID = 850284466680758282
 
@@ -44,6 +45,7 @@ async def on_ready():
 
 @client.event
 async def on_voice_state_update(member, before, after):
+    random_index = randrange(len(god_names))
     if member.name + "#" + member.discriminator in WATCH_LIST:
         if before.channel != after.channel:
             channel = client.get_channel(CHANNEL_ID)
@@ -51,12 +53,12 @@ async def on_voice_state_update(member, before, after):
             if after.channel is not None:
                 await channel.send(
                     f"{user.mention}! Эй, "
-                    + random.choice(god_names)
+                    + god_names[random_index]
                     + f", {member.mention} зашел в канал {after.channel.name}, заходи, опущенка")
             else:
                 await channel.send(
                     f"{user.mention}! Эй, "
-                    + random.choice(god_names)
+                    + god_names[random_index]
                     + f", {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
     # Replace USER_ID with the ID of the user you want to check for muting
     if member.name + "#" + member.discriminator in WATCH_LIST:
