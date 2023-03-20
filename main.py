@@ -65,12 +65,12 @@ async def on_voice_state_update(member, before, after):
         if before.self_mute and not after.self_mute:
             # User was unmuted, do nothing
             text_channel = client.get_channel(CHANNEL_ID)
-            await text_channel.send(f"{member.mention} unmute")
+            await text_channel.send(f"{member.mention} развалил ебало, сейчас снова будет нести хуйню.")
             return
         elif not before.self_mute and after.self_mute:
             # User was muted, send message to text channel
             text_channel = client.get_channel(CHANNEL_ID)
-            await text_channel.send(f"{member.mention} mute")
+            await text_channel.send(f"{member.mention} покорно завалил ебало.")
             return
 
 
