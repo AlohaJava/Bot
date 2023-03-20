@@ -81,7 +81,7 @@ async def on_message(message):
 
     if str(message.author) in daun_list:
         user = await client.fetch_user(user_id)
-        await message.channel.send(f"{user.mention}" + random.choice(massage_on_message))
+        await message.channel.send(f"{user.mention}" +" "+ random.choice(massage_on_message))
 
 
 @client.event
