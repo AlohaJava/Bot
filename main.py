@@ -6,7 +6,7 @@ from random import randrange
 
 CHANNEL_ID = 850284466680758282
 
-WATCH_LIST = ["00.#3516", "Vaflz#3717"]
+WATCH_LIST = ["00.#3516", "Vaflz#3717", "EinsOrange#4068"]
 intents = discord.Intents.default()
 intents.voice_states = True
 
@@ -51,11 +51,15 @@ async def on_voice_state_update(member, before, after):
             channel = client.get_channel(CHANNEL_ID)
             user = await client.fetch_user(user_id)
             if after.channel is not None:
+                if user in channel.members:
+                    return
                 await channel.send(
                     f"{user.mention}! Эй, "
                     + god_names[random_index]
                     + f", {member.mention} зашел в канал {after.channel.name}, заходи, опущенка")
             else:
+                if user not in channel.members:
+                    return
                 await channel.send(
                     f"{user.mention}! Эй, "
                     + god_names[random_index]
