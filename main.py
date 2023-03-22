@@ -65,7 +65,7 @@ async def on_voice_state_update(member, before, after):
                     + god_names[random_index]
                     + f", {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
     # Replace USER_ID with the ID of the user you want to check for muting
-    if member.name + "#" + member.discriminator in WATCH_LIST:
+    if member.name + "#" + member.discriminator in daun_list:
         if before.self_mute and not after.self_mute:
             # User was unmuted, do nothing
             text_channel = client.get_channel(CHANNEL_ID)
