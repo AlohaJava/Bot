@@ -5,7 +5,7 @@ from discord.ext import commands
 from random import randrange
 
 CHANNEL_ID = 850284466680758282
-
+counter = 0
 WATCH_LIST = ["00.#3516", "Vaflz#3717", "EinsOrange#4068"]
 intents = discord.Intents.default()
 intents.voice_states = True
@@ -57,6 +57,7 @@ async def on_voice_state_update(member, before, after):
                     f"{user.mention}! Эй, "
                     + god_names[random_index]
                     + f", {member.mention} зашел в канал {after.channel.name}, заходи, опущенка")
+                counter+=1
             else:
                 if user not in channel.members:
                     return
@@ -64,6 +65,17 @@ async def on_voice_state_update(member, before, after):
                     f"{user.mention}! Эй, "
                     + god_names[random_index]
                     + f", {member.mention} вышел из канала {before.channel.name}, давай уже съебывай нахуй отсюда")
+                if counter > 0:
+                    counter-=1
+    if member.name + "#" + member.discriminator in daun_list:
+        if before.channel != after.channel:
+            channel = client.get_channel(CHANNEL_ID)
+            user = await client.fetch_user(user_id)
+            if counter > 0:
+                await channel.send(
+                    "Чмоня "
+                    +f"{user.mention}! успешно зашла на канал "
+                    + f"{before.channel.name}, хоть кто-то его спас от одиночества")  
     # Replace USER_ID with the ID of the user you want to check for muting
     if member.name + "#" + member.discriminator in daun_list:
         if before.self_mute and not after.self_mute:
