@@ -1,3 +1,5 @@
+import contextvars
+import functools
 import os
 import random
 import time
@@ -162,6 +164,13 @@ async def on_member_update(before, after):
             else:
                 game = before.activity.name
                 print(f"{after.name} позорно слился в {game} и плачет ;'(")
+
+
+async def to_thread(func, /, *args, **kwargs):
+    loop = asyncio.get_running_loop()
+    ctx = contextvars.copy_context()
+    func_call = functools.partial(ctx.run, func, *args, **kwargs)
+    return await loop.run_in_executor(None, func_call)
 
 
 async def say_about_techdemo_nice():
