@@ -90,8 +90,7 @@ async def proceed_daun_entered(member, before, after):
             if counter > 0:
                 await channel.send(
                     "Чмоня "
-                    + f"{user.mention}! успешно зашла на канал "
-                    + f"{before.channel.name}, хоть кто-то его спас от одиночества")
+                    + f"{user.mention}! успешно зашла на канал, хоть кто-то его спас от одиночества")
 
 
 async def check_spam():
@@ -112,7 +111,7 @@ async def proceed_mute_action(member, before, after):
         if not await check_spam():
             return
         if before.self_mute and not after.self_mute:
-            # User was unmuted, do nothing
+            # User was unmuted
             text_channel = client.get_channel(CHANNEL_ID)
             await text_channel.send(f"{member.mention} развалил ебало, сейчас снова будет нести хуйню.")
             return
