@@ -1,14 +1,8 @@
-import contextvars
-import functools
 import os
 import random
-import time
-
 import discord
-import threading
-import schedule
-import asyncio
 import aioredis
+from discord.ext import tasks
 
 # start bot and run redis
 intents = discord.Intents.default()
@@ -94,11 +88,11 @@ async def proceed_daun_entered(member, before, after):
 async def proceed_mute_action(member, before, after):
     await redis.incr("SPAM_COUNT")
     spamming = redis.get("SPAM_COUNT")
-    if spamming == 3:
+    if spamming == 4:
         text_channel = client.get_channel(CHANNEL_ID)
         await text_channel.send(f"{member.mention} хватит спамить, шлюшка")
         return
-    if spamming > 3:
+    if spamming > 4:
         return
     if member.name + "#" + member.discriminator in DAUNIL_LIST:
         if before.self_mute and not after.self_mute:
@@ -156,7 +150,7 @@ async def on_reaction_add(reaction, user):
 
 @client.event
 async def on_member_update(before, after):
-    if member.name + "#" + member.discriminator in DAUNIL_LIST:
+    if before.member.name + "#" + before.member.discriminator in DAUNIL_LIST:
         if before.activity != after.activity:
             if after.activity is not None and after.activity.type == discord.ActivityType.playing:
                 game = after.activity.name
@@ -166,13 +160,7 @@ async def on_member_update(before, after):
                 print(f"{after.name} позорно слился в {game} и плачет ;'(")
 
 
-async def to_thread(func, /, *args, **kwargs):
-    loop = asyncio.get_running_loop()
-    ctx = contextvars.copy_context()
-    func_call = functools.partial(ctx.run, func, *args, **kwargs)
-    return await loop.run_in_executor(None, func_call)
-
-
+@tasks.loop(hours=24)
 async def say_about_techdemo_nice():
     channel = client.get_channel(CHANNEL_ID)
     user = await client.fetch_user(DAUNIL_ID)
@@ -181,23 +169,9 @@ async def say_about_techdemo_nice():
     await channel.send(f"Дней без технодемки {user.mention}: {days} (((")
 
 
+@tasks.loop(minutes=1)
 async def clean_spam():
     await redis.set("SPAM_COUNT", 0)
 
-
-schedule.every().day.at("15:00").do(asyncio.to_thread, say_about_techdemo_nice)
-schedule.every().minute.do(asyncio.to_thread, say_about_techdemo_nice)
-
-
-# Define a function to run the scheduler in a new thread
-def run_scheduler():
-    while True:
-        schedule.run_pending()
-        time.sleep(5)
-
-
-# Start the scheduler in a new thread
-thread = threading.Thread(target=run_scheduler)
-thread.start()
 
 client.run(os.environ["DISCORD_TOKEN"])
