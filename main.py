@@ -90,7 +90,8 @@ async def proceed_daun_entered(member, before, after):
             if counter > 0:
                 await channel.send(
                     "Чмоня "
-                    + f"{user.mention}! успешно зашла на канал, хоть кто-то его спас от одиночества")
+                    + f"{user.mention}! успешно зашла на канал "
+                    + f"{after.channel.name}, хоть кто-то его спас от одиночества")
 
 
 async def check_spam():
