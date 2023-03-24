@@ -40,7 +40,8 @@ god_names = [
 @client.event
 async def on_ready():
     print("Bot is ready")
-
+    say_about_techdemo_nice.start()
+    clean_spam.start()
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -180,6 +181,5 @@ async def say_about_techdemo_nice():
 @tasks.loop(minutes=1)
 async def clean_spam():
     await redis.set("SPAM_COUNT", 0)
-
 
 client.run(os.environ["DISCORD_TOKEN"])
