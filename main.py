@@ -174,7 +174,7 @@ async def say_about_techdemo_nice():
     channel = client.get_channel(CHANNEL_ID)
     user = await client.fetch_user(DAUNIL_ID)
     await redis.incr("TECH_DEMO_DAYS")
-    days = await redis.get("TECH_DEMO_DAYS")
+    days = int(await redis.get("TECH_DEMO_DAYS"))
     await channel.send(f"Дней без технодемки {user.mention}: {days} (((")
 
 
