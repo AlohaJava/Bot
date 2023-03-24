@@ -88,7 +88,7 @@ async def proceed_daun_entered(member, before, after):
 
 async def check_spam():
     await redis.incr("SPAM_COUNT")
-    spamming = int(redis.get("SPAM_COUNT"))
+    spamming = int(await redis.get("SPAM_COUNT"))
     user = await client.fetch_user(DAUNIL_ID)
     if spamming == 4:
         text_channel = client.get_channel(CHANNEL_ID)
@@ -174,7 +174,7 @@ async def say_about_techdemo_nice():
     channel = client.get_channel(CHANNEL_ID)
     user = await client.fetch_user(DAUNIL_ID)
     await redis.incr("TECH_DEMO_DAYS")
-    days = redis.get("TECH_DEMO_DAYS")
+    days = await redis.get("TECH_DEMO_DAYS")
     await channel.send(f"Дней без технодемки {user.mention}: {days} (((")
 
 
