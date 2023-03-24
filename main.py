@@ -85,14 +85,21 @@ async def proceed_daun_entered(member, before, after):
                     + f"{before.channel.name}, хоть кто-то его спас от одиночества")
 
 
-async def proceed_mute_action(member, before, after):
+async def check_spam():
     await redis.incr("SPAM_COUNT")
     spamming = redis.get("SPAM_COUNT")
+    user = await client.fetch_user(DAUNIL_ID)
     if spamming == 4:
         text_channel = client.get_channel(CHANNEL_ID)
-        await text_channel.send(f"{member.mention} хватит спамить, шлюшка")
-        return
+        await text_channel.send(f"{user.mention} хватит спамить, шлюшка")
+        return False
     if spamming > 4:
+        return False
+    return True
+
+
+async def proceed_mute_action(member, before, after):
+    if not await check_spam():
         return
     if member.name + "#" + member.discriminator in DAUNIL_LIST:
         if before.self_mute and not after.self_mute:
@@ -111,7 +118,8 @@ async def proceed_mute_action(member, before, after):
 async def on_message(message):
     if message.author == client.user:
         return
-
+    if not await check_spam():
+        return
     if str(message.author) in DAUNIL_LIST:
         user = await client.fetch_user(DAUNIL_ID)
         await message.channel.send(f"{user.mention}" + " " + random.choice(massage_on_message))
