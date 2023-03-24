@@ -3,6 +3,7 @@ import random
 import discord
 import aioredis
 from discord.ext import tasks
+from datetime import datetime
 
 # start bot and run redis
 intents = discord.Intents.default()
@@ -177,13 +178,15 @@ async def on_member_update(before, after):
                 print(f"{after.name} позорно слился в {game} и плачет ;'(")
 
 
-@tasks.loop(hours=24)
+@tasks.loop(hours=8)
 async def say_about_techdemo_nice():
     channel = client.get_channel(CHANNEL_ID)
     user = await client.fetch_user(DAUNIL_ID)
-    await redis.incr("TECH_DEMO_DAYS")
-    days = int(await redis.get("TECH_DEMO_DAYS"))
-    await channel.send(f"Дней без технодемки {user.mention}: {days} (((")
+    date_string = os.environ["TECH_DEMO_COUNTER_START_DATE"]
+    date_obj = datetime.strptime(date_string, '%Y-%m-%d')
+    today = datetime.now()
+    difference_in_days = (today - date_obj).days
+    await channel.send(f"Дней без технодемки {user.mention}: {difference_in_days} (((")
 
 
 @tasks.loop(minutes=2)
