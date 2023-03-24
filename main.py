@@ -99,9 +99,9 @@ async def check_spam():
 
 
 async def proceed_mute_action(member, before, after):
-    if not await check_spam():
-        return
     if member.name + "#" + member.discriminator in DAUNIL_LIST:
+        if not await check_spam():
+            return
         if before.self_mute and not after.self_mute:
             # User was unmuted, do nothing
             text_channel = client.get_channel(CHANNEL_ID)
@@ -118,9 +118,9 @@ async def proceed_mute_action(member, before, after):
 async def on_message(message):
     if message.author == client.user:
         return
-    if not await check_spam():
-        return
     if str(message.author) in DAUNIL_LIST:
+        if not await check_spam():
+            return
         user = await client.fetch_user(DAUNIL_ID)
         await message.channel.send(f"{user.mention}" + " " + random.choice(massage_on_message))
 
