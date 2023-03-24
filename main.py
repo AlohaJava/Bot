@@ -12,8 +12,8 @@ redis = aioredis.from_url(os.environ["REDIS_URL"])
 
 CHANNEL_ID = 850284466680758282
 WATCH_LIST = ["00.#3516", "Vaflz#3717", "EinsOrange#4068"]
-DAUNIL_ID = 1076869683837407263
-DAUNIL_LIST = ['EinsOrange#4068']
+DAUNIL_ID = 464767634483838977
+DAUNIL_LIST = ['Кудряшев Даниил#2761']
 CURRENT_WATCHER_COUNT = "CURRENT_WATCHER_COUNT"
 
 massage_on_message = [
@@ -132,6 +132,8 @@ async def on_message_edit(before, after):
         return
 
     if str(before.message.author) in DAUNIL_LIST:
+        if not await check_spam():
+            return
         user = await client.fetch_user(DAUNIL_ID)
         await after.message.channel.send(f"{user.mention} обосрался?")
 
@@ -142,6 +144,8 @@ async def on_message_delete(message):
         return
 
     if str(message.author) in DAUNIL_LIST:
+        if not await check_spam():
+            return
         user = await client.fetch_user(DAUNIL_ID)
         await message.channel.send(f"{user.mention} выронил кал из жопы и быстро съел")
 
@@ -178,7 +182,7 @@ async def say_about_techdemo_nice():
     await channel.send(f"Дней без технодемки {user.mention}: {days} (((")
 
 
-@tasks.loop(minutes=1)
+@tasks.loop(minutes=2)
 async def clean_spam():
     await redis.set("SPAM_COUNT", 0)
 
