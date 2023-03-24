@@ -12,8 +12,8 @@ redis = aioredis.from_url(os.environ["REDIS_URL"])
 
 CHANNEL_ID = 850284466680758282
 WATCH_LIST = ["00.#3516", "Vaflz#3717", "EinsOrange#4068"]
-DAUNIL_ID = 464767634483838977
-DAUNIL_LIST = ['Кудряшев Даниил#2761']
+DAUNIL_ID = 1076869683837407263
+DAUNIL_LIST = ['EinsOrange#4068']
 CURRENT_WATCHER_COUNT = "CURRENT_WATCHER_COUNT"
 
 massage_on_message = [
@@ -42,7 +42,8 @@ async def on_ready():
     print("Bot is ready")
     say_about_techdemo_nice.start()
     clean_spam.start()
-
+    channel = client.get_channel(CHANNEL_ID)
+    await channel.send("А меня создатели снова обновили, что же я еще научился делать?")
 @client.event
 async def on_voice_state_update(member, before, after):
     await proceed_watcher_entered(member, before, after)
@@ -132,9 +133,6 @@ async def on_message(message):
 
 @client.event
 async def on_message_edit(before, after):
-    if before.message.author == client.user:
-        return
-
     if str(before.message.author) in DAUNIL_LIST:
         if not await check_spam():
             return
@@ -186,7 +184,7 @@ async def say_about_techdemo_nice():
     await channel.send(f"Дней без технодемки {user.mention}: {days} (((")
 
 
-@tasks.loop(minutes=2)
+@tasks.loop(minutes=1)
 async def clean_spam():
     await redis.set("SPAM_COUNT", 0)
 
