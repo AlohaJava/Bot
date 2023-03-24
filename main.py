@@ -52,6 +52,8 @@ async def on_voice_state_update(member, before, after):
 
 async def proceed_watcher_entered(member, before, after):
     if member.name + "#" + member.discriminator in WATCH_LIST:
+        if not await check_spam():
+            return
         if before.channel != after.channel:
             channel = client.get_channel(CHANNEL_ID)
             user = await client.fetch_user(DAUNIL_ID)
@@ -75,6 +77,8 @@ async def proceed_watcher_entered(member, before, after):
 
 async def proceed_daun_entered(member, before, after):
     if member.name + "#" + member.discriminator in DAUNIL_LIST:
+        if not await check_spam():
+            return
         if before.channel != after.channel:
             channel = client.get_channel(CHANNEL_ID)
             user = await client.fetch_user(DAUNIL_ID)
