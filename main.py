@@ -77,7 +77,7 @@ async def proceed_daun_entered(member, before, after):
         if before.channel != after.channel:
             channel = client.get_channel(CHANNEL_ID)
             user = await client.fetch_user(DAUNIL_ID)
-            counter = await redis.get(CURRENT_WATCHER_COUNT)
+            counter = int(await redis.get(CURRENT_WATCHER_COUNT))
             if counter > 0:
                 await channel.send(
                     "Чмоня "
@@ -87,7 +87,7 @@ async def proceed_daun_entered(member, before, after):
 
 async def check_spam():
     await redis.incr("SPAM_COUNT")
-    spamming = redis.get("SPAM_COUNT")
+    spamming = int(redis.get("SPAM_COUNT"))
     user = await client.fetch_user(DAUNIL_ID)
     if spamming == 4:
         text_channel = client.get_channel(CHANNEL_ID)
