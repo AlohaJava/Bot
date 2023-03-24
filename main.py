@@ -81,6 +81,8 @@ async def proceed_daun_entered(member, before, after):
         if not await check_spam():
             return
         if before.channel != after.channel:
+            if after.channel is None:
+                return
             channel = client.get_channel(CHANNEL_ID)
             user = await client.fetch_user(DAUNIL_ID)
             counter = int(await redis.get(CURRENT_WATCHER_COUNT))
