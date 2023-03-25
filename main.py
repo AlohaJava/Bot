@@ -47,6 +47,8 @@ async def on_ready():
     await channel.send("А меня создатели снова обновили, что же я еще научился делать?")
 @client.event
 async def on_voice_state_update(member, before, after):
+    if not await check_spam():
+        return
     await proceed_watcher_entered(member, before, after)
     await proceed_daun_entered(member, before, after)
     await proceed_mute_action(member, before, after)
@@ -54,8 +56,6 @@ async def on_voice_state_update(member, before, after):
 
 async def proceed_watcher_entered(member, before, after):
     if member.name + "#" + member.discriminator in WATCH_LIST:
-        if not await check_spam():
-            return
         if before.channel != after.channel:
             channel = client.get_channel(CHANNEL_ID)
             user = await client.fetch_user(DAUNIL_ID)
@@ -79,8 +79,6 @@ async def proceed_watcher_entered(member, before, after):
 
 async def proceed_daun_entered(member, before, after):
     if member.name + "#" + member.discriminator in DAUNIL_LIST:
-        if not await check_spam():
-            return
         if before.channel != after.channel:
             if after.channel is None:
                 return
@@ -109,8 +107,6 @@ async def check_spam():
 
 async def proceed_mute_action(member, before, after):
     if member.name + "#" + member.discriminator in DAUNIL_LIST:
-        if not await check_spam():
-            return
         if before.self_mute and not after.self_mute:
             # User was unmuted
             text_channel = client.get_channel(CHANNEL_ID)
