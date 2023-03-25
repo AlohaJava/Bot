@@ -101,7 +101,7 @@ async def check_spam():
     if spamming == 4:
         text_channel = client.get_channel(CHANNEL_ID)
         await text_channel.send(f"{user.mention} хватит спамить, шлюшка")
-        return False
+        return True
     if spamming > 4:
         return False
     return True
