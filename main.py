@@ -106,7 +106,7 @@ async def check_spam():
 
 
 async def proceed_mute_action(member, before, after):
-    if member.name + "#" + member.discriminator in DAUNIL_LIST:
+    if False:
         if before.self_mute and not after.self_mute:
             # User was unmuted
             text_channel = client.get_channel(CHANNEL_ID)
