@@ -43,12 +43,14 @@ async def on_ready():
     print("Bot is ready")
     say_about_techdemo_nice.start()
     clean_spam.start()
-    channel = client.get_channel(CHANNEL_ID)
-    await channel.send("А меня создатели снова обновили, что же я еще научился делать?")
+
+
 @client.event
 async def on_voice_state_update(member, before, after):
-    if not await check_spam():
-        return
+    if (member.name + "#" + member.discriminator in WATCH_LIST) or (
+            member.name + "#" + member.discriminator in DAUNIL_LIST):
+        if not await check_spam():
+            return
     await proceed_watcher_entered(member, before, after)
     await proceed_daun_entered(member, before, after)
     await proceed_mute_action(member, before, after)
@@ -188,5 +190,6 @@ async def say_about_techdemo_nice():
 @tasks.loop(minutes=2)
 async def clean_spam():
     await redis.set("SPAM_COUNT", 0)
+
 
 client.run(os.environ["DISCORD_TOKEN"])
