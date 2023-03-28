@@ -43,6 +43,9 @@ async def on_ready():
     print("Bot is ready")
     say_about_techdemo_nice.start()
     clean_spam.start()
+    channel = client.get_channel(CHANNEL_ID)
+    user = await client.fetch_user(236240664340201482)
+    await channel.send(f"{user.mention}! Эй, c днём рождения, булочка, от команды разработки бота!")
 
 
 @client.event
