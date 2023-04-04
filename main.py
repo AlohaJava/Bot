@@ -43,9 +43,6 @@ async def on_ready():
     print("Bot is ready")
     say_about_techdemo_nice.start()
     clean_spam.start()
-    channel = client.get_channel(CHANNEL_ID)
-    user = await client.fetch_user(236240664340201482)
-    await channel.send(f"{user.mention}! Эй, c днём рождения, булочка, от команды разработки бота!")
 
 
 @client.event
@@ -188,6 +185,8 @@ async def say_about_techdemo_nice():
     today = datetime.now()
     difference_in_days = (today - date_obj).days
     await channel.send(f"Дней без технодемки {user.mention}: {difference_in_days} (((")
+    user2 = await client.fetch_user(771060320474103868)
+    await channel.send(f"{user2.mention}! Дней без нейродвачера: {difference_in_days-17}")
 
 
 @tasks.loop(minutes=2)
