@@ -17,6 +17,7 @@ DAUNIL_ID = 464767634483838977
 DAUNIL_LIST = ['Кудряшев Даниил#2761']
 CURRENT_WATCHER_COUNT = "CURRENT_WATCHER_COUNT"
 
+
 massage_on_message = [
     'снова что-то высрал. Господи, что же несет эта проститутка',
     'это было в твоей жопе или будет?',
