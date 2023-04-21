@@ -199,7 +199,7 @@ async def get_balabola(text):
     async with aiohttp.ClientSession() as session:
         async with session.post(API_URL, data=json.dumps(payload), headers=headers) as response:
             resp_json = await response.json()
-            return text + resp_json["text"]
+            return text +" "+resp_json["text"]
 
 
 @tasks.loop(hours=8)
