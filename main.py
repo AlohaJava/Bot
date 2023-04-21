@@ -1,9 +1,11 @@
 import os
 import random
+import aiohttp
 import discord
 import aioredis
 from discord.ext import tasks
 from datetime import datetime
+import json
 
 # start bot and run redis
 intents = discord.Intents.default()
@@ -16,7 +18,6 @@ WATCH_LIST = ["00.#3516", "Vaflz#3717", "EinsOrange#4068"]
 DAUNIL_ID = 464767634483838977
 DAUNIL_LIST = ['Кудряшев Даниил#2761']
 CURRENT_WATCHER_COUNT = "CURRENT_WATCHER_COUNT"
-
 
 massage_on_message = [
     'снова что-то высрал. Господи, что же несет эта проститутка',
@@ -36,6 +37,13 @@ god_names = [
     'Дотер'
     'Данило'
     'Донный'
+]
+
+variations_ivan = [
+    "%дни% дней без нейросетевого двачера от Ивана.",
+    "%дни% дней без нейросетевого двачера от Ивана, как же долго это продолжается...",
+    "%дни% дней без нейросетевого двачера от Ивана, может, пора вернуться?",
+    "%дни% дней без нейросетевой машины."
 ]
 
 
@@ -177,6 +185,23 @@ async def on_member_update(before, after):
                 print(f"{after.name} позорно слился в {game} и плачет ;'(")
 
 
+async def get_balabola(text):
+    headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_4) AppleWebKit/605.1.15 '
+                      '(KHTML, like Gecko) Version/14.1.1 Safari/605.1.15',
+        'Origin': 'https://yandex.ru',
+        'Referer': 'https://yandex.ru/',
+    }
+
+    API_URL = 'https://zeapi.yandex.net/lab/api/yalm/text3'
+    payload = {"query": text, "intro": 6, "filter": 1}
+    async with aiohttp.ClientSession() as session:
+        async with session.post(API_URL, data=json.dumps(payload), headers=headers) as response:
+            resp_json = await response.json()
+            return resp_json["text"]
+
+
 @tasks.loop(hours=8)
 async def say_about_techdemo_nice():
     channel = client.get_channel(CHANNEL_ID)
@@ -185,9 +210,11 @@ async def say_about_techdemo_nice():
     date_obj = datetime.strptime(date_string, '%Y-%m-%d')
     today = datetime.now()
     difference_in_days = (today - date_obj).days
-    await channel.send(f"Дней без технодемки {user.mention}: {difference_in_days} (((")
+    await  channel.send(await get_balabola(f"{difference_in_days} дней без технодемки даниила"))
+    await  channel.send(await get_balabola(random.choice(variations_ivan).replace("%дни%", str(difference_in_days))))
+    # await channel.send(f"Дней без технодемки {user.mention}: {difference_in_days} (((")
     user2 = await client.fetch_user(771060320474103868)
-    await channel.send(f"{user2.mention}! Дней без нейродвачера: {difference_in_days-17}")
+    # await channel.send(f"{user2.mention}! Дней без нейродвачера: {difference_in_days - 17}")
 
 
 @tasks.loop(minutes=2)
