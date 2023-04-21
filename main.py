@@ -195,7 +195,7 @@ async def get_balabola(text):
     }
 
     API_URL = 'https://zeapi.yandex.net/lab/api/yalm/text3'
-    payload = {"query": text, "intro": 6, "filter": 1}
+    payload = {"query": text, "intro": random.randrange(0, 7, 6), "filter": 1}
     async with aiohttp.ClientSession() as session:
         async with session.post(API_URL, data=json.dumps(payload), headers=headers) as response:
             resp_json = await response.json()
@@ -210,7 +210,7 @@ async def say_about_techdemo_nice():
     today = datetime.now()
     difference_in_days = (today - date_obj).days
     await  channel.send(await get_balabola(f"{difference_in_days} дней без технодемки даниила"))
-    await  channel.send(await get_balabola(random.choice(variations_ivan).replace("%дни%", str(difference_in_days))))
+    await  channel.send(await get_balabola(random.choice(variations_ivan).replace("%дни%", str(difference_in_days-17))))
 
 
 @tasks.loop(minutes=2)
