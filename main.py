@@ -199,7 +199,7 @@ async def get_balabola(text):
     async with aiohttp.ClientSession() as session:
         async with session.post(API_URL, data=json.dumps(payload), headers=headers) as response:
             resp_json = await response.json()
-            return text +" "+resp_json["text"]
+            return text + " " + resp_json["text"]
 
 
 @tasks.loop(hours=8)
@@ -209,8 +209,11 @@ async def say_about_techdemo_nice():
     date_obj = datetime.strptime(date_string, '%Y-%m-%d')
     today = datetime.now()
     difference_in_days = (today - date_obj).days
-    await  channel.send(await get_balabola(f"{difference_in_days} дней без технодемки даниила"))
-    await  channel.send(await get_balabola(random.choice(variations_ivan).replace("%дни%", str(difference_in_days-17))))
+    user = await client.fetch_user(DAUNIL_ID)
+    user2 = await client.fetch_user(771060320474103868)
+    await channel.send(f"{user.mention}!" + await get_balabola(f"{difference_in_days} дней без технодемки даниила"))
+    await channel.send(f"{user2.mention}!" + await get_balabola(
+        random.choice(variations_ivan).replace("%дни%", str(difference_in_days - 17))))
 
 
 @tasks.loop(minutes=2)
