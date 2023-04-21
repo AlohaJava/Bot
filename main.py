@@ -211,8 +211,8 @@ async def say_about_techdemo_nice():
     difference_in_days = (today - date_obj).days
     user = await client.fetch_user(DAUNIL_ID)
     user2 = await client.fetch_user(771060320474103868)
-    await channel.send(f"{user.mention}!" + await get_balabola(f"{difference_in_days} дней без технодемки даниила"))
-    await channel.send(f"{user2.mention}!" + await get_balabola(
+    await channel.send(f"{user.mention}! " + await get_balabola(f"{difference_in_days} дней без технодемки даниила"))
+    await channel.send(f"{user2.mention}! " + await get_balabola(
         random.choice(variations_ivan).replace("%дни%", str(difference_in_days - 17))))
 
 
