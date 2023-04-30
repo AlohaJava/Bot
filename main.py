@@ -218,50 +218,37 @@ async def say_about_techdemo_nice():
 
 @tasks.loop(hours=24)
 async def kto_chiya():
-    user_ids = [771060320474103868, 330617931362729985, 364836085592752139, 236893809886232577, 414517713168367617, 323122393591709696, 464767634483838977, 236860833882177536]
-
-    # Создаем словарь, где ключами будут id пользователей, а значениями - их хозяева
-    owners = {user_id: None for user_id in user_ids}
-
-    # Проходимся по каждому пользователю и случайным образом определяем, будет ли он хозяином или подчиненным
-    for user_id in user_ids:
-        if not owners[user_id]:
-            if random.random() > 0.5:
-                # Если пользователь не имеет хозяина и случайное число больше 0.5, он становится хозяином
-                free_owners = [owner for owner in owners if not owners[owner] and owner != user_id]
-                if free_owners:
-                    owner_id = random.choice(free_owners)
-                    owners[user_id] = owner_id
-                    owners[owner_id] = user_id
-            else:
-                # Если пользователь не имеет хозяина и случайное число меньше или равно 0.5, он становится подчиненным
-                free_owners = [owner for owner in owners if owners[owner] and owner != user_id and not owners[owners[owner]]]
-                if free_owners:
-                    owner_id = random.choice(free_owners)
-                    owners[user_id] = owners[owner_id]
-                    owners[owners[owner_id]] = user_id
-
-    # Если некоторые пользователи все еще не имеют хозяев, присваиваем им случайных хозяев
-    free_users = [user_id for user_id in owners if not owners[user_id]]
-    while free_users:
-        user_id = free_users.pop()
-        free_owners = [owner for owner in owners if not owners[owner] and owner != user_id]
-        if free_owners:
-            owner_id = random.choice(free_owners)
-            owners[user_id] = owner_id
-            owners[owner_id] = user_id
-    channel = client.get_channel(CHANNEL_ID)
-    # Выводим список пользователей и их хозяев на экран, используя упоминания Discord
     spisok = "Кто чья сегодня?\n"
-    for user_id in owners:
-        user_mention = f"<@{user_id}>"
-        owner_id = owners[user_id]
-        owner_mention = f"<@{owner_id}>" if owner_id else "никто"
-        user1 = await client.fetch_user(user_id)
-        user2 = await client.fetch_user(owner_id)
-        spisok+=f"{user2.mention} хозяин {user1.mention}\n"
+    user_id_list = [771060320474103868, 330617931362729985, 364836085592752139, 236893809886232577, 414517713168367617, 323122393591709696, 464767634483838977, 236860833882177536]
+    # создаем список из псевдослучайных сопоставлений пользователей и их хозяев
+    random.shuffle(user_id_list)
+    user_owner_list = [(user_id_list[i], None) for i in range(len(user_id_list))]
+    for i in range(len(user_id_list)):
+        user, owner = user_owner_list[i]
+        # если пользователь еще не имеет хозяина, выбираем случайного из оставшихся пользователей
+        if not owner:
+            possible_owners = [user_id for user_id, owner_id in user_owner_list if owner_id is None and user_id != user]
+            if possible_owners:
+                chosen_owner = random.choice(possible_owners)
+                user_owner_list[i] = (user, chosen_owner)
+                # если новый хозяин уже есть в списке, то все его подчиненные становятся подчиненными текущего пользователя
+                for j in range(len(user_id_list)):
+                    other_user, other_owner = user_owner_list[j]
+                    if other_owner == chosen_owner:
+                        user_owner_list[j] = (other_user, user)
+    # выводим результат
+    for user_id, owner_id in user_owner_list:
+        if owner_id is None:
+            user = await client.fetch_user(user_id)
+            spisok+=f'{user.mention} не имеет хозяина'
+        else:
+            owner = await client.fetch_user(owner_id)
+            user = await client.fetch_user(user_id)
+            spisok+=f'{owner.mention} хозяин {user.mention}'
     spisok +="Список считается окончательным и обжалованию не подлежит."
     await channel.send(spisok)
+
+
 @tasks.loop(minutes=2)
 async def clean_spam():
     await redis.set("SPAM_COUNT", 0)
