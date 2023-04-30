@@ -251,7 +251,7 @@ async def kto_chiya():
         if len(master[1]) == 0:
             spisok+=f'{user.mention} не подчиняется никому!\n'
         else:
-            spisok += f'{user.mention} подчиняются: {", ".join([(await client.fetch_user(x)).mention for x in master[1]])}!\n'
+            spisok += f'У {user.mention} в подчинении: {", ".join([(await client.fetch_user(x)).mention for x in master[1]])}!\n'
     spisok += "Список считается окончательным и обжалованию не подлежит."
     channel = client.get_channel(CHANNEL_ID)
     await channel.send(spisok)
