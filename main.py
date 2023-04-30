@@ -6,6 +6,7 @@ import aioredis
 from discord.ext import tasks
 from datetime import datetime
 import json
+import copy
 
 # start bot and run redis
 intents = discord.Intents.default()
@@ -218,36 +219,40 @@ async def say_about_techdemo_nice():
 
 @tasks.loop(hours=24)
 async def kto_chiya():
+    list_user_ids = [771060320474103868, 330617931362729985, 364836085592752139, 236893809886232577, 414517713168367617, 323122393591709696, 464767634483838977, 236860833882177536, 236240664340201482, 295268744001748993, 298091789649313795]
+    random.shuffle(list_user_ids)
+    free_user_ids = copy.deepcopy(list_user_ids)
+    random.shuffle(free_user_ids)
+    master_list_ids = []
+    total_podch = 0
     spisok = "Кто чья сегодня?\n"
-    user_id_list = [771060320474103868, 330617931362729985, 364836085592752139, 236893809886232577, 414517713168367617, 323122393591709696, 464767634483838977, 236860833882177536]
-    # создаем список из псевдослучайных сопоставлений пользователей и их хозяев
-    random.shuffle(user_id_list)
-    user_owner_list = [(user_id_list[i], None) for i in range(len(user_id_list))]
-    for i in range(len(user_id_list)):
-        user, owner = user_owner_list[i]
-        # если пользователь еще не имеет хозяина, выбираем случайного из оставшихся пользователей
-        if not owner:
-            possible_owners = [user_id for user_id, owner_id in user_owner_list if owner_id is None and user_id != user]
-            if possible_owners:
-                chosen_owner = random.choice(possible_owners)
-                user_owner_list[i] = (user, chosen_owner)
-                # если новый хозяин уже есть в списке, то все его подчиненные становятся подчиненными текущего пользователя
-                for j in range(len(user_id_list)):
-                    other_user, other_owner = user_owner_list[j]
-                    if other_owner == chosen_owner:
-                        user_owner_list[j] = (other_user, user)
-    # выводим результат
-    for user_id, owner_id in user_owner_list:
-        if owner_id is None:
-            user = await client.fetch_user(user_id)
-            spisok+=f'{user.mention} не имеет хозяина\n'
+    for user in free_user_ids:
+        if not (user in list_user_ids):
+            continue
+        list_user_ids.remove(user)
+        podch_count = random.choices([0, 1, 2, 3], [0.105, 0.65, 0.25, 0.05])[0]
+        if podch_count == 0:
+            master_list_ids.append([user, []])
+            continue
+        if (total_podch + podch_count) >= len(free_user_ids):
+            podch_count = len(list_user_ids) - total_podch
+        total_podch += podch_count
+        mlist = []
+        for i in range(podch_count):
+            if len(list_user_ids) == 0:
+                break
+            n = random.choice(list_user_ids)
+            list_user_ids.remove(n)
+            mlist.append(n)
+        master_list_ids.append([user, mlist])
+
+    for master in master_list_ids:
+        user = await client.fetch_user(master[0])
+        if len(master[1]) == 0:
+            spisok+=f'{user.mention} не подчиняется никому!\n'
         else:
-            owner = await client.fetch_user(owner_id)
-            user = await client.fetch_user(user_id)
-            spisok+=f'{owner.mention} хозяин {user.mention}\n'
-    spisok +="Список считается окончательным и обжалованию не подлежит."
-    channel = client.get_channel(CHANNEL_ID)
-    await channel.send(spisok)
+            spisok += f'{user.mention} подчиняются: {", ".join([(await client.fetch_user(master[x])).mention for x in master[1]])}!\n'
+    spisok += "Список считается окончательным и обжалованию не подлежит."
 
 
 @tasks.loop(minutes=2)
