@@ -240,11 +240,11 @@ async def kto_chiya():
     for user_id, owner_id in user_owner_list:
         if owner_id is None:
             user = await client.fetch_user(user_id)
-            spisok+=f'{user.mention} не имеет хозяина'
+            spisok+=f'{user.mention} не имеет хозяина\n'
         else:
             owner = await client.fetch_user(owner_id)
             user = await client.fetch_user(user_id)
-            spisok+=f'{owner.mention} хозяин {user.mention}'
+            spisok+=f'{owner.mention} хозяин {user.mention}\n'
     spisok +="Список считается окончательным и обжалованию не подлежит."
     channel = client.get_channel(CHANNEL_ID)
     await channel.send(spisok)
