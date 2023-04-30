@@ -252,12 +252,16 @@ async def kto_chiya():
             owners[owner_id] = user_id
     channel = client.get_channel(CHANNEL_ID)
     # Выводим список пользователей и их хозяев на экран, используя упоминания Discord
+    spisok = "Кто чья сегодня?\n"
     for user_id in owners:
         user_mention = f"<@{user_id}>"
         owner_id = owners[user_id]
         owner_mention = f"<@{owner_id}>" if owner_id else "никто"
-        channel.send(f"{user_mention} хозяин {owner_mention}")
-
+        user1 = await client.fetch_user(user_id)
+        user2 = await client.fetch_user(owner_id)
+        spisok+=f"{user2.mention} хозяин {user1.mention}\n"
+    spisok +="Список считается окончательным и обжалованию не подлежит."
+    await channel.send(spisok)
 @tasks.loop(minutes=2)
 async def clean_spam():
     await redis.set("SPAM_COUNT", 0)
