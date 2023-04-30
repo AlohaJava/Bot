@@ -253,7 +253,8 @@ async def kto_chiya():
         else:
             spisok += f'{user.mention} подчиняются: {", ".join([(await client.fetch_user(x)).mention for x in master[1]])}!\n'
     spisok += "Список считается окончательным и обжалованию не подлежит."
-
+    channel = client.get_channel(CHANNEL_ID)
+    await channel.send(spisok)
 
 @tasks.loop(minutes=2)
 async def clean_spam():
