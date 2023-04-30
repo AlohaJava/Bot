@@ -246,6 +246,7 @@ async def kto_chiya():
             user = await client.fetch_user(user_id)
             spisok+=f'{owner.mention} хозяин {user.mention}'
     spisok +="Список считается окончательным и обжалованию не подлежит."
+    channel = client.get_channel(CHANNEL_ID)
     await channel.send(spisok)
 
 
