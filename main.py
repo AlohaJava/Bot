@@ -192,7 +192,10 @@ async def on_message(message):
             return
         user = await client.fetch_user(DAUNIL_ID)
         await message.channel.send(f"{user.mention}" + " " + random.choice(massage_on_message))
-
+    if message.content.startswith('продолжи'):
+        phrase = message.content.split(' ', 1)[1]
+        continued_phrase = await get_balabola(phrase)  # вызываем функцию для продолжения фразы
+        await message.channel.send(continued_phrase)  # отправляем результат в канал
 
 @client.event
 async def on_message_edit(before, after):
@@ -253,11 +256,6 @@ async def get_balabola(text):
         async with session.post(API_URL, data=json.dumps(payload), headers=headers) as response:
             resp_json = await response.json()
             return text + " " + resp_json["text"]
-
-@bot.command()
-async def продолжи(ctx, *, phrase):
-    continued_phrase = await get_balabola(phrase)
-    await ctx.send(continued_phrase)  # отправляем результат в канал, откуда была вызвана команда
 
 @tasks.loop(hours=8)
 async def say_about_techdemo_nice():
