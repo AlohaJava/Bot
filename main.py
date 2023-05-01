@@ -12,7 +12,7 @@ import copy
 # start bot and run redis
 intents = discord.Intents.default()
 intents.voice_states = True
-client = discord.Client(intents=intents)
+client = discord.Client(intents=intents, command_prefix='/')
 redis = aioredis.from_url(os.environ["REDIS_URL"])
 
 CHANNEL_ID = 850284466680758282
@@ -254,6 +254,10 @@ async def get_balabola(text):
             resp_json = await response.json()
             return text + " " + resp_json["text"]
 
+@bot.command()
+async def продолжи(ctx, *, phrase):
+    continued_phrase = get_balabola(phrase)
+    await ctx.send(continued_phrase)  # отправляем результат в канал, откуда была вызвана команда
 
 @tasks.loop(hours=8)
 async def say_about_techdemo_nice():
