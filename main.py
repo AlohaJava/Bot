@@ -8,7 +8,6 @@ from datetime import datetime
 import json
 import copy
 
-
 # start bot and run redis
 intents = discord.Intents.default()
 intents.voice_states = True
