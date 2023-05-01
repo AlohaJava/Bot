@@ -256,7 +256,7 @@ async def get_balabola(text):
 
 @bot.command()
 async def продолжи(ctx, *, phrase):
-    continued_phrase = get_balabola(phrase)
+    continued_phrase = await get_balabola(phrase)
     await ctx.send(continued_phrase)  # отправляем результат в канал, откуда была вызвана команда
 
 @tasks.loop(hours=8)
