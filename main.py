@@ -279,10 +279,9 @@ async def kto_chiya():
     total_podch = 0
     spisok = "Кто чья сегодня?\n"
     for user in free_user_ids:
-        try:
-            list_user_ids.remove(user)
-        except Error:
-            pass
+        if not (user in list_user_ids):
+            continue
+        list_user_ids.remove(user)
         podch_count = random.choices([0, 1, 2, 3], [0.105, 0.65, 0.25, 0.05])[0]
         if podch_count == 0:
             master_list_ids.append([user, []])
