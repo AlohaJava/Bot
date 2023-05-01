@@ -294,8 +294,7 @@ async def kto_chiya():
             if len(list_user_ids) == 0:
                 break
             n = random.choice(list_user_ids)
-            if random.random() < 0.75:
-                list_user_ids.remove(n)
+            list_user_ids.remove(n)
             mlist.append(n)
         master_list_ids.append([user, mlist])
 
