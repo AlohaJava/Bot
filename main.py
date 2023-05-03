@@ -268,7 +268,6 @@ async def say_about_techdemo_nice():
     await channel.send(f"{user.mention}!\n" + await get_balabola(random.choice(variations_daniel).replace("%дни%", str(difference_in_days))))
     await channel.send(f"{user2.mention}!\n" + await get_balabola(
         random.choice(variations_ivan).replace("%дни%", str(difference_in_days - 17))))
-    await channel.send("/image capybara")
  
 
 @tasks.loop(hours=24)
