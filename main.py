@@ -256,7 +256,7 @@ async def get_balabola(text):
             resp_json = await response.json()
             return text + " " + resp_json["text"]
 
-@tasks.loop(hours=8)
+@tasks.loop(hours=16)
 async def say_about_techdemo_nice():
     channel = client.get_channel(CHANNEL_ID)
     date_string = os.environ["TECH_DEMO_COUNTER_START_DATE"]
@@ -268,7 +268,7 @@ async def say_about_techdemo_nice():
     await channel.send(f"{user.mention}!\n" + await get_balabola(random.choice(variations_daniel).replace("%дни%", str(difference_in_days))))
     await channel.send(f"{user2.mention}!\n" + await get_balabola(
         random.choice(variations_ivan).replace("%дни%", str(difference_in_days - 17))))
- 
+    await channel.send("Дней без Залужного:" + str(difference_in_days - 54))
 
 @tasks.loop(hours=24)
 async def kto_chiya():
