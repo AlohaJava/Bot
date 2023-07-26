@@ -101,9 +101,11 @@ variations_daniel = [
 @client.event
 async def on_ready():
     print("Bot is ready")
-    say_about_techdemo_nice.start()
-    clean_spam.start()
-    kto_chiya.start()
+    channel = client.get_channel(CHANNEL_ID)
+    channel.send("Прощайте, други")
+    #say_about_techdemo_nice.start()
+    #clean_spam.start()
+    #kto_chiya.start()
 
 
 @client.event
