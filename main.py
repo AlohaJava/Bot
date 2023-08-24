@@ -3,7 +3,7 @@ import random
 import discord
 from discord.ext import tasks
 import copy
-print(1+1)
+print(1+2)
 # start bot and run redis
 intents = discord.Intents.default()
 intents.voice_states = True
