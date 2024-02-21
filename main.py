@@ -57,6 +57,9 @@ async def kto_chiya():
     spisok += "Список считается окончательным и обжалованию не подлежит."
     channel = client.get_channel(CHANNEL_ID)
     await channel.send(spisok)
+    list_user_ids = [771060320474103868, 330617931362729985, 364836085592752139, 236893809886232577, 414517713168367617,
+                     323122393591709696, 464767634483838977, 236860833882177536, 236240664340201482,
+                     298091789649313795, 312579123585351680]
     user = await client.fetch_user(random.choice(list_user_ids))
     await channel.send(f'Сегодня не натурал: {user.mention}')
     user = await client.fetch_user(random.choice(list_user_ids))
