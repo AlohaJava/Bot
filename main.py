@@ -57,5 +57,7 @@ async def kto_chiya():
     spisok += "Список считается окончательным и обжалованию не подлежит."
     channel = client.get_channel(CHANNEL_ID)
     await channel.send(spisok)
+    await channel.send(f'Сегодня не натурал: {random.choice(list_user_ids)}')
+    await channel.send(f'Сегодня не уважает ветеранов: {random.choice(list_user_ids)}')
 
 client.run(os.environ["DISCORD_TOKEN"])
